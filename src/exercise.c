@@ -83,9 +83,9 @@ void *producerFunc(void *arg) {
         while (itemCount == BUFFER_SIZE) {
             pthread_cond_wait(&full, &mutex);
         }
-        int inCurr = in;
+        int position = in;
         produceItem(i);
-        printf("Producer %d produced item %d at the position %d in the buffer.\n", threadNum, i, inCurr);
+        printf("Producer %d produced item %d at the position %d in the buffer.\n", threadNum, i, position);
         
         pthread_cond_signal(&empty);
         pthread_mutex_unlock(&mutex);
@@ -104,9 +104,9 @@ void *consumerFunc(void *arg) {
         while (itemCount == 0) {
             pthread_cond_wait(&empty, &mutex);
         }
-        int outCurr = out;
+        int position = out;
         int item = consumeItem();
-        printf("Consumer %d consumed item %d at the position %d in the buffer.\n", threadNum, item, outCurr);
+        printf("Consumer %d consumed item %d at the position %d in the buffer.\n", threadNum, item, position);
         
         pthread_cond_signal(&full);
         pthread_mutex_unlock(&mutex);
